@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>INFO 450 - Week 1</title>
+    <meta charset="utf-8">
+    <style>
+      @import url(https://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
+      @import url(https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic);
+      @import url(https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700,400italic);
+
+      body { font-family: 'Droid Serif'; }
+      h1, h2, h3 {
+        font-family: 'Yanone Kaffeesatz';
+        font-weight: normal;
+      }
+      .remark-code, .remark-inline-code { font-family: 'Ubuntu Mono'; }
+
+/* Two-column layout */
+      .left-column {
+        color: #777;
+        width: 20%;
+        height: 92%;
+        float: left;
+      }
+        .left-column h2:last-of-type, .left-column h3:last-child {
+          color: #000;
+        }
+      .right-column {
+        width: 75%;
+        float: right;
+        padding-top: 1em;
+      }
+/* Two-column layout */
+      .left-column-half {
+        color: #777;
+        width: 50%;
+        height: 92%;
+        float: left;
+      }
+      .right-column-half {
+        width: 50%;
+        float: right;
+        padding-top: 1em;
+        line-height: .9em;
+      }
+
+    table, td, th {
+        border: 1px solid black;
+        font-size: .9em;
+    }
+
+
+    </style>
+  </head>
+  <body>
+    <textarea id="source">
+---
+# INFO 450 Fall 2020
+
+<div style="text-align:center;font-size: 1.5;line-height:1.8em;">Week 1</div>
+
+---
+# Course Content
+
+We will be using Canvas:<a href="https://virginiacommonwealth.instructure.com/"> https://virginiacommonwealth.instructure.com/</a>
+
+I do not know how to use Canvas, so bear with me.
+
+
+
+---
+# Books
+
+<ul>
+
+<li><a href="https://amzn.to/2YlQFIm">Python Crash Course</a></li>
+<li> <a href="https://amzn.to/3hOpBch">Python for Data Analysis</a></li>
+
+ </ul>
+
+---
+--- 
+# Syllabus
+
+<a href="https://virginiacommonwealth.instructure.com/courses/18044">https://virginiacommonwealth.instructure.com/courses/18044</a>
+
+---
+# HONOR CODE
+
+I have a very strict anti-cheating policy.  If there are any infractions of the honor code in this class you will get a zero for the class in addition to any punishments deemed necessary by the university.
+
+ 
+Do. Not. Cheat.
+
+I hate sending students to the honor board, but I have, and I will.  
+
+
+
+---
+# Python
+
+Two years to change this class from C++ to Python.  Thank you Dr Wynn (retired)!<br/>
+
+* Higher level language with abstractions over languages like C++
+* Built in functionality to solve all modern computing challenges
+* Perfectly suited and widly used for areas like Devops, Data Analysis, Machine Learning and general computing
+* Easy learning for for the language, to allow us to solve real problems quicker, instead of learning the nuts and bolts of how memory is managed (pointers, yuck)
+
+---
+# What is Python?
+
+"Python is an interpreted, object-oriented, high-level programming language with dynamic semantics. 
+
+Its high-level built in data structures, combined with dynamic typing and dynamic binding, make it very attractive for Rapid Application Development, as well as for use as a scripting or glue language to connect existing components together. 
+
+Python's simple, easy to learn syntax emphasizes readability and therefore reduces the cost of program maintenance. 
+
+Python supports modules and packages, which encourages program modularity and code reuse. 
+
+The Python interpreter and the extensive standard library are available in source or binary form without charge for all major platforms, and can be freely distributed. " 
+
+https://www.python.org/doc/essays/blurb/
+
+---
+# I'm not convinced, I like ....Java
+
+<small>
+Python programs are generally expected to run slower than Java programs, but they also take much less time to develop. Python programs are typically 3-5 times shorter than equivalent Java programs. This difference can be attributed to Python's built-in high-level data types and its dynamic typing. For example, a Python programmer wastes no time declaring the types of arguments or variables, and Python's powerful polymorphic list and dictionary types, for which rich syntactic support is built straight into the language, find a use in almost every Python program. Because of the run-time typing, Python's run time must work harder than Java's. For example, when evaluating the expression a+b, it must first inspect the objects a and b to find out their type, which is not known at compile time. It then invokes the appropriate addition operation, which may be an overloaded user-defined method. Java, on the other hand, can perform an efficient integer or floating point addition, but requires variable declarations for a and b, and does not allow overloading of the + operator for instances of user-defined classes.
+
+For these reasons, Python is much better suited as a "glue" language, while Java is better characterized as a low-level implementation language. In fact, the two together make an excellent combination. Components can be developed in Java and combined to form applications in Python; Python can also be used to prototype components until their design can be "hardened" in a Java implementation. To support this type of development, a Python implementation written in Java is under development, which allows calling Python code from Java and vice versa. In this implementation, Python source code is translated to Java bytecode (with help from a run-time library to support Python's dynamic semantics).</small>
+
+
+---
+# I'm not convinced, I like ....C++ 
+
+Almost everything said for Java also applies for C++, just more so: where Python code is typically 3-5 times shorter than equivalent Java code, it is often 5-10 times shorter than equivalent C++ code! Anecdotal evidence suggests that one Python programmer can finish in two months what two C++ programmers can't complete in a year. Python shines as a glue language, used to combine components written in C++.
+
+---
+# Logistics
+
+For this course, we will be writing our code in Python 3.8.   Python 2.7 is dead and Python 3.5 is EOL this year (or so).
+
+All of our code will be submitted via Github (www.github.com) and mostly graded automatically.
+
+https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh
+
+ - You will need to create a github account for class.   One of the first assignments will be to create an account and repository for your submissions.
+
+I recommend using Anaconda for your Python environment management.   
+
+---
+# Tech!
+
+* Laptop – Windows 10 Professional, MacOS Catalina 10.5
+
+* Visual Studio – newest version of Visual Studio CODE 
+
+* Linux: Anaconda https://docs.anaconda.com/anaconda/install/windows/ 
+
+* Mac OS: Anaconda https://docs.anaconda.com/anaconda/install/mac-os/ 
+
+* Linux: Anaconda https://docs.anaconda.com/anaconda/install/linux/ 
+
+* Docker:  https://docs.docker.com/get-docker/
+
+* Github in VS Code:  https://code.visualstudio.com/docs/editor/versioncontrol   (use Git plugin, not Github plugin)
+---
+# Store code
+
+* Version Control Software: https://www.atlassian.com/git/tutorials/what-is-version-control
+```
+Version control systems are a category of software tools that help a software
+team manage changes to source code over time. Version control software keeps
+track of every modification to the code in a special kind of database.
+If a mistake is made, developers can turn back the clock and compare earlier
+versions of the code to help fix the mistake while minimizing disruption to
+all team members.
+```
+
+* GitHub -- github.com
+
+* Create an account
+
+---
+#  Git in a nutshell
+
+Github.com is your master repository
+<a href="https://help.github.com/en/github">Github help</a>
+* Create a repository in the github.com site
+* Use VSCode or command line 'git' to clone the repository
+```bash
+git clone git@github.com:chrisfauerbach/info450_fall_2020.git
+```
+* Make changes, add files, etc locally.
+* Add new files:
+```bash
+git add newfile.py
+```
+* Commit new file
+```bash
+git commit -m "I am committing a new file."
+```
+* Push remote:
+```bash
+git push
+```
+
+---
+# Writing Python
+
+Primarily, we will be using a command line, Visual Studio Code and Anaconda.
+
+If you haven't gotten your local Python environment to work yet, you can prototype some code here:
+
+https://www.onlinegdb.com/online_python_compiler
+
+but assigments still must be in by the due date, via Github, if that's what's prescribed
+
+---
+# What does a Python program look like?
+
+```python
+import logging
+import json
+
+# create logger
+logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.DEBUG)
+
+def printThingAsJSON(thing):
+    print(json.dumps(thing))
+
+if __name__ == "__main__":
+    output = {"Hi": "Mom"}
+    printThingAsJSON(output)
+    logging.debug("Completed.")
+```
+<a href="./first.py" target="_blank">first.py</a>
+---
+# Line by line
+
+```python
+import logging
+import json
+```
+* Importing libraries/packages that we will use in this program. 
+ * Logging = Logging framework with log levels, DEBUG, INFO, WARNING, ERROR, CRITICAL
+ * JSON = Convert JSON (Javascript Object Notation) to and from Python objects.
+
+
+Logging is a means of tracking events that happen when some software runs. The software’s developer adds logging calls to their code to indicate that certain events have occurred. An event is described by a descriptive message which can optionally contain variable data (i.e. data that is potentially different for each occurrence of the event). Events also have an importance which the developer ascribes to the event; the importance can also be called the level or severity.
+
+<a href="https://docs.python.org/3/howto/logging.html" target="_blank">https://docs.python.org/3/howto/logging.html</a>
+
+---
+# Line by line (cont.)
+```python
+# create logger
+logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.DEBUG)
+```
+
+Quick set up of logging formatter and level.   
+
+Setting to DEBUG to show all levels.   
+
+Quick format to see the output
+
+---
+# Line by line (cont.)
+
+```python
+def print_things_as_json(thing):
+    print(json.dumps(thing))
+```
+
+def - Defining a function: print_things_as_json
+
+(thing) a required parameter called thing
+
+print - Sends data to the standard output.  The data in this case will be the string returned from the 'json.dumps' function. 
+
+json.dumps - Package json.  Function dumps
+
+---
+# Line by line (cont.)
+
+```python
+if __name__ == "__main__":
+    output = {"Hi": "Mom"}
+    print_things_as_json(output)
+    logging.debug("Completed.")
+```
+
+Main function.
+
+Output is a variable of type 'dict' - we'll get to that soon
+
+Calling the function 'print_things_as_json', passing in the dict output
+
+Logging the message 'Completed' to the logging framework
+
+---
+# Executed
+
+```bash
+$ python3 first.py
+{"Hi": "Mom"}
+DEBUG: Completed.
+```
+
+---
+# Definitions and notes
+
+Python strings can either be surrounded by " or '
+
+The main function of python is weird, but makes sense eventually:  
+```
+if __name__ == "__main__"
+```
+
+print() - sends data to the programs STDOUT (standard out).  Do not overuse print for 'DEBUG' type messages.  
+
+ALWAYS use the LOGGING framework!  
+
+You're too smart for a basic Hello World program, but if you want to see it, here it is:
+
+```python 
+print("Hello, World!")
+```
+
+or maybe
+
+```python
+if __name__ == "__main__":
+    print("Hello, World!")
+```
+
+---
+# Spaces or tabs?
+https://www.python.org/dev/peps/pep-0008/#tabs-or-spaces
+
+Python doesn't use curly braces like other programming languages.
+
+Python programs are organized around whitespace.
+
+Levels of embedding are just 'more white space'
+
+In this class, we will use 4 spaces for our indentation
+
+```python
+
+def some_function(parameter):
+    logging.debug("Something")
+    if True:
+        logging.debug("Yes it's true.")
+    else:
+        logging.debug("No it's not true.")
+    for x in range(10):
+        if x % 2 == 0:
+            print("Yes it's an even number too.")
+
+```
+
+* You don't have to understand that code yet.. but know it.
+
+---
+# Variables
+
+Variables are <i>labels</i> that store data.  Variables are meant to store state for use within your program.
+
+Python has a few rules for naming variables: (pg 17)
+
+* Names can only hold letters, numbers and underscores.
+* Spaces are not allowed in variable names
+* Do not use Python keywords (pg 471)
+* Variables must be declared before they're access
+* Variables can be assigned a value when they're declared
+* Variable names should be lowercase, with words separated by underscores as necessary to improve readability.
+
+---
+# Dynamic typing
+
+Python is a dynamically typed language.  Your code doesn't have to know ahead of time what data type variables are.
+
+C++
+```c++
+int x = 0;
+char[] str = "Some string.";
+str = 12312;  // not sure what'd happen
+```
+
+vs Python
+```python
+x = 0
+str = "Some String"
+str = 12312
+```
+---
+# Variable types
+
+* Strings
+* Floats
+* Integers
+
+* Constants:  No 'constant' concept in Python.  Best practices, constants should be ALL CAPITAL LETTERS e.g.
+
+```python
+PI = 3.1415
+```
+
+---
+# Comments
+
+Quick note before diving deep into Strings.
+
+Comments in Python are single line comments, always.
+
+Precede the line with #
+
+```python
+# This is a comment
+x = 123
+print(x)
+# Here's another comment.
+```
+
+---
+# Strings
+
+As previously stated, Strings can be built with single or double quotes.
+```python
+first_string = "This is a string."
+second_string = 'This is a string too'
+# Next line, my slides dont show it well, but, its valid code.
+third_string = "This is how to embed a \" within a string"
+# bad_string = "This is not valid'
+x = len(second_string)
+# len() gets the length of the string
+```
+
+* Strings can be thought of as 'lists' of characters, much like C+
+
+---
+# Manipulation
+
+* Multiple functions to manipulate a string
+ * upper
+ * lower
+ * title
+
+```python
+>>> str = "cat in the hat"
+>>> str.upper()
+'CAT IN THE HAT'
+>>> str.lower()
+'cat in the hat'
+>>> str.title()
+'Cat In The Hat'
+```
+
+You can run an interactive python shell on your command line by typing :   
+```bash
+python3 # Depending on your OS, it may be different
+```
+---
+# Tabs and Newlines (oh my)
+
+Embed a tab or newline character in your string.  Simple!
+
+```python
+>>> a = "first line\nsecond line"
+>>> a
+'first line\nsecond line'
+>>> print(a)
+first line
+second line
+>>> a = "what about \t tab separated\tstrings"
+>>> a
+'what about \t tab separated\tstrings'
+>>> print(a)
+what about 	 tab separated	strings
+```
+
+---
+# Stripping
+
+Remove whitespace before and/or after
+
+```bash
+>>> str = "    this is a string     "
+>>> str.lstrip()
+'this is a string     '
+>>> str.rstrip()
+'    this is a string'
+>>> str.strip()
+'this is a string'
+```
+
+* lstrip() - Left strip, remove white space on the left
+* rstrip() - Right strip, remove whitespace on the right
+* strip() - Strip, remove whitespace left and right
+
+---
+# Formatted Strings
+
+Best thing since sliced bread.
+
+Book says: "Using Variables In Strings" (pg 21)
+
+Old way:
+```python
+>>> name = 'chris'
+>>> last = 'fauerbach'
+>>> "{} {}".format(name, last) 
+'chris fauerbach'
+# Looks reasonable
+```
+
+Formatted Strings - the new magic
+```python
+>>> name = "chris"
+>>> last = "fauerbach"
+>>> f"{name} {last}"
+'chris fauerbach'
+>>> f"{name.upper()} {last.title()}"
+'CHRIS Fauerbach'
+```
+
+---
+# Sub String 
+
+Just kidding, that's chapter 3.. we'll get to that next week.
+
+---
+# Numbers
+
+This will be quicker, since they're just numbers
+
+Integers or floats
+
+Cast between the two
+
+```python
+>>> x = 3.14
+>>> y = int(x)
+>>> print(x)
+3.14
+>>> print(y)
+3
+>>> x = float(y)
+>>> x
+3.0
+```
+---
+# Mathematics
+
++, -, *, /
+
+```python
+>>> 2 + 2
+4
+>>> 2 - 0
+2
+>>> 2 * 2
+4
+>>> 2 / 2
+1.0
+```
+
+with variables, and shortcuts
+
+```python
+>>> x = 3
+>>> x
+3
+>>> x += 3
+>>> x
+6
+>>> x -= 2
+>>> x
+4
+```
+---
+# Exponents
+
+```python
+>>> 4 ** 2
+16
+>>> 4 ** 3
+64
+>>> x = 3
+>>> x = x ** 2
+>>> x
+9
+```
+---
+# Modulus - %
+
+Division's remainder
+
+```python
+>>> x = 13
+>>> y = x % 2
+>>> y
+1
+>>> y = x % 5
+>>> y
+3
+```
+---
+# Multiple Assigments
+
+This is how you can assign multiple values to multiple variables on one line.
+
+Best practices, really only use this for returning multiple values from a function:
+
+```python
+>>> a, b, c = 1, 2, 3
+>>> b
+2
+>>> c
+3
+>>> a
+1
+```
+
+```python
+>>> d, e, f = 1, "dog", 3.14
+>>> d
+1
+>>> e
+'dog'
+>>> f
+3.14
+```
+---
+# Docker
+
+On your laptops, please install Docker:<br/>
+
+https://docs.docker.com/install/<br/>
+This will be successful when you can run the following on your command line:    
+
+```bash
+docker run hello-world
+```
+
+THEN
+
+Attempt this:
+```bash
+$ docker run --name some-postgres -e POSTGRES_PASSWORD=mysecretpassword -d postgres:11
+```
+
+<img src="docker.png" width="80%"/>
+---
+# Test it out
+
+```bash
+docker exec -it some-postgres bash
+root@deb673c4061d:/# su postgres
+postgres@deb673c4061d:/$ psql
+psql (11.9 (Debian 11.9-1.pgdg90+1))
+Type "help" for help.
+
+postgres=# \conninfo
+You are connected to database "postgres" as user "postgres" via socket in "/var/run/postgresql" at port "5432".
+postgres-# \q
+postgres@deb673c4061d:/$ exit
+exit
+```
+
+---
+# Next Week
+
+* Functions
+* Lists 
+* Dicts
+* Tuples
+* Input/Output
+
+---
+    </textarea>
+    <script src="https://remarkjs.com/downloads/remark-latest.min.js">
+    </script>
+    <script>
+      var slideshow = remark.create();
+    </script>
+  </body>
+</html>
