@@ -387,7 +387,53 @@ Let's look at some Python fun to see what's going on.
 ```
 
 ---
+# List Comprehension
 
+Allows you to perform some actions on a list in one line of code.
+
+Combines the for loop and creation of new elements into one line.
+
+Book:  "List comprehensions are not always presented to beginners, but I have included them here because you'll most likely see them as soon as you start looking at other peoples code."
+
+```python
+>>> squares = [value ** 2 for value in range(1,11)]
+>>> squares
+[1, 4, 9, 16, 25, 36, 49, 64, 81, 100]
+
+---
+# HOMEWORK
+
+Due Wednesday, 2nd by 23:59:59 ET (EST?)
+
+[Your github name]/[your github repo]/week2/homework.py
+
+Complete the function "squared threes"
+
+```
+import logging
+logging.basicConfig(level=logging.DEBUG)
+
+def squared_threes():
+    return_value = []
+    # YOUR CODE GOES HERE
+
+    # END SHOULDNT GO BEYOND HERE
+    return return_value
+
+if __name__ == "__main__":
+   for x in squared_threes():
+       print(x)
+
+   # should print out all numbers between 0 and 99 (inclusive)
+   # that are evenly divisible by 3, then squared.
+   # e.g 
+   # 9
+   # 36
+   # 81 
+   # .....   etc
+
+
+---
 
     </textarea>
     <script src="https://remarkjs.com/downloads/remark-latest.min.js">
