@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>INFO 450 - Week 4</title>
+    <meta charset="utf-8">
+    <style>
+      @import url(https://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
+      @import url(https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic);
+      @import url(https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700,400italic);
+
+      body { font-family: 'Droid Serif'; }
+      h1, h2, h3 {
+        font-family: 'Yanone Kaffeesatz';
+        font-weight: normal;
+      }
+      .remark-code, .remark-inline-code { font-family: 'Ubuntu Mono'; }
+
+/* Two-column layout */
+      .left-column {
+        color: #777;
+        width: 20%;
+        height: 92%;
+        float: left;
+      }
+        .left-column h2:last-of-type, .left-column h3:last-child {
+          color: #000;
+        }
+      .right-column {
+        width: 75%;
+        float: right;
+        padding-top: 1em;
+      }
+/* Two-column layout */
+      .left-column-half {
+        color: #777;
+        width: 50%;
+        height: 92%;
+        float: left;
+      }
+      .right-column-half {
+        width: 50%;
+        float: right;
+        padding-top: 1em;
+        line-height: .9em;
+      }
+
+    .remark-code{
+      font-size:14px;
+    }
+    table, td, th {
+        border: 1px solid black;
+        font-size: .9em;
+    }
+
+
+    </style>
+  </head>
+  <body>
+    <textarea id="source">
+# INFO 450 Fall 2020
+
+<div style="text-align:center;font-size: 1.5;line-height:1.8em;">Week 4</div>
+---
+# Agenda
+
+*  dicts
+*  functions
+*  requests
+
+---
+#  Dictionaries
+
+Python dictionaries are a foundational data type in the language
+
+Dictionaries (dict) can be thought of as a 'map' structure
+
+Dictionaries store other values internally, like a list, but...
+
+Values are assigned to keys within the dictionary.
+
+* Can be used to group data together, such as information about a person
+
+---
+# Simple Syntax
+
+```python
+alien_0 = {"color": "green", "points": 5}
+print("Aliens color is: ", alien_0["color"])
+print("Aliens point value is: ", alien_0["points"])
+```
+
+* Dicts are created with {} as the 'constructor'
+* Compare to lists, which are notated as: []
+
+Dicts can store 0 or more 'keys' and their values.
+
+* Keys must be 'hashable' - (strings, numbers, tuple *)
+* Values can be 'anything'
+
+---
+# Creating a dictionary
+
+```python
+d = {}
+d = {"key": "value"}
+```
+
+syntax:  
+
+Keys are paired to their values with colons.
+
+multiple key/values can be set and separated by commas
+
+
+```python
+alien_0 = {"color": "green", "points": 5}
+```
+---
+# Modifying data in a dictionary
+
+How do we set key values in a dict?
+
+```python
+d = {}
+d['age'] = 35
+d['colors'] = ['blue', 'green', 'black']
+
+```
+
+How do we remove keys from a dict?
+
+```python
+>>> d = {"age": 35}
+>>> d
+{'age': 35}
+>>> del d['age']
+>>> d
+{}
+```
+---
+# Accessing data in a dict
+
+Get a known key (REALLY known, guaranteed, etc.  rarely used):
+
+```python
+>>> d = {"age": 41}
+>>> d['age']
+41
+>>> d['height']
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+KeyError: 'height'
+```
+
+Safely get a key:
+```python
+>>> d = {"age": 41}
+>>> d.get('age')
+41
+>>> d.get('height')
+>>> #Nothing above is the same as None
+>>> x = d.get('age')
+>>> x
+41
+```
+
+Get a key, but if it doesn't exist, get a default value:
+```python
+>>> x = d.get('height', 99)
+>>> x
+99
+>>> x = d.get('height') or 99
+>>> x
+99
+
+```
+---
+# Chaining Dictionaries 
+
+(not in book that I saw)
+
+Common practice can potentially nest dictionaries.  Looking at an example from Spotify API:
+
+https://developer.spotify.com/documentation/web-api/reference/artists/get-artists-albums/
+
+* note: I fudged the structure a little to make it fit my desired example
+
+---
+```json
+{
+  "href": "https://api.spotify.com/v1/artists/1vCWHaC5f2uS3yhpwWbIA6/albums?offset=0&limit=2&include_groups=appears_on&market=ES",
+  "album": 
+    {
+      "album_group": "appears_on",
+      "album_type": "album",
+      "artist": 
+        {
+          "external_urls": {
+            "spotify": "https://open.spotify.com/artist/0LyfQWJT6nXafLPZqxe9Of"
+          },
+          "href": "https://api.spotify.com/v1/artists/0LyfQWJT6nXafLPZqxe9Of",
+          "id": "0LyfQWJT6nXafLPZqxe9Of",
+          "name": "Various Artists",
+          "type": "artist",
+          "uri": "spotify:artist:0LyfQWJT6nXafLPZqxe9Of"
+        }
+.
+.
+.
+
+  "previous": null,
+  "total": 308
+}
+
+```
+```python
+artist_name = spotify_value.get('album', {}).get('artist', {}).get('name')
+```
+Better than:
+
+```python
+album = spotify_value.get('album')
+if album:
+    artist = album.get('artist')
+    if artist:
+        artist_name = artist.get('name')
+
+```
+
+## ? OR IS IT BETTER?
+---
+# Functions/docs for Dictionaries
+<a href="https://docs.python.org/3/library/stdtypes.html#typesmapping" target="_blank">https://docs.python.org/3/library/stdtypes.html#typesmapping</a>
+
+* list(d) - Returns a list of all keys
+* len(d) - Returns the number of items - (CHF) - number of keys
+* key in d: Tests whether the key is present in the d
+* k not in d: Tests (inverse) of 'key in d'
+* iter(d) - Iterator over the keys in the dictionary
+* clear(d) - removes all items from the dict
+* copy(d) - shallow copy (doesn't copy values)
+* items(d) - returns a view of the data in the items, (key, value) - tuples
+* keys(d) - returns a list of keys
+* values(d) - returns a list of keys
+* ... and more
+
+---
+# Looping on dicts
+<a href="https://docs.python.org/3/tutorial/datastructures.html#dictionaries" target="_blank">https://docs.python.org/3/tutorial/datastructures.html#dictionaries</a>
+
+```python
+>>> product = {"product_id":"14322", "name": "Big 65 inch TV", "price": 499.99}
+>>> for key, value in product.items():
+...     print(f"{key}: {value}")
+...
+product_id: 14322
+name: Big 65 inch TV
+price: 499.99
+>>> for key in product.keys():
+...     print(f"{key}: {product[key]}")
+...
+product_id: 14322
+name: Big 65 inch TV
+price: 499.99
+
+>>> for key in product:
+...     print(f"{key}: {product[key]}")
+...
+product_id: 14322
+name: Big 65 inch TV
+price: 499.99
+
+```
+---
+# Generating a unique list of values
+
+Wrap the 'values' with a 'set' command, to convert the 'list' datatype to a 'set'
+
+Set: A set object is an unordered collection of distinct hashable objects.
+
+```python
+>>> favorite_languages = {"jen": "python", "sarah": "c", "edward":"ruby", "phil": "python"}
+>>> for language in favorite_languages.values():
+...     print(f"This is a favorite language: {language}")
+...
+This is a favorite language: python
+This is a favorite language: c
+This is a favorite language: ruby
+This is a favorite language: python
+>>> for language in set(favorite_languages.values()):
+...     print(f"This is a favorite language: {language}")
+...
+This is a favorite language: ruby
+This is a favorite language: python
+This is a favorite language: c
+```
+
+---
+# TO READ:
+
+Read the end of Chapter 6.
+
+Using dicts in a list, using lists in a dict
+
+```python
+
+aliens = []
+aliens.append({"color":"green", "points": 5})
+aliens.append({"color":"red", "points": 10})
+aliens.append({"color":"yellow", "points": 15})
+
+
+```
+
+```python
+person = {}
+person['name'] = 'Chris'
+person['favorite_colors'] = ["purple", "gold"]
+
+```
+---
+# BREAK
+---
+# Let's do something fun.
+
+Web API - Application Programming Interface: aka REST API, API, HTTP API, Web Service, etc.
+
+HTTP - Protocol that powers your web browser.  Request / Response.  HTTP GET, HTTP POST, etc.
+
+OAuth2 - Authentication protocol built so a client application (ours) can trust authentication provided by another service, without having to know the secrets
+ * "Log in with Facebook"
+
+
+---
+
+    </textarea>
+    <script src="https://remarkjs.com/downloads/remark-latest.min.js">
+    </script>
+    <script>
+      var slideshow = remark.create();
+    </script>
+  </body>
+</html>
