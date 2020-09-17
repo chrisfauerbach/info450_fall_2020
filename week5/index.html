@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>INFO 450 - Week 5</title>
+    <meta charset="utf-8">
+    <style>
+      @import url(https://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
+      @import url(https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic);
+      @import url(https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700,400italic);
+
+      body { font-family: 'Droid Serif'; }
+      h1, h2, h3 {
+        font-family: 'Yanone Kaffeesatz';
+        font-weight: normal;
+      }
+      .remark-code, .remark-inline-code { font-family: 'Ubuntu Mono'; }
+
+/* Two-column layout */
+      .left-column {
+        color: #777;
+        width: 20%;
+        height: 92%;
+        float: left;
+      }
+        .left-column h2:last-of-type, .left-column h3:last-child {
+          color: #000;
+        }
+      .right-column {
+        width: 75%;
+        float: right;
+        padding-top: 1em;
+      }
+/* Two-column layout */
+      .left-column-half {
+        color: #777;
+        width: 50%;
+        height: 92%;
+        float: left;
+      }
+      .right-column-half {
+        width: 50%;
+        float: right;
+        padding-top: 1em;
+        line-height: .9em;
+      }
+
+    .remark-code{
+      font-size:14px;
+    }
+    table, td, th {
+        border: 1px solid black;
+        font-size: .9em;
+    }
+
+
+    </style>
+  </head>
+  <body>
+    <textarea id="source">
+# INFO 450 Fall 2020
+
+<div style="text-align:center;font-size: 1.5;line-height:1.8em;">Week 5</div>
+---
+# Agenda
+
+*  files
+*  functions
+
+---
+#  Files
+
+Files are ways of storing data permanently, typically on a persistent media like an internal hard drive, network drive or USB storage.
+
+Files, in most operating systems, are in a 'folder' or 'path' and have a filename + extension.  Exentions can be used to associate programs for opening files of a certain type.
+ * e.g. 'pdf' -> Adobe PDF Reader
+ * e.g. 'xls' -> Microsoft Excel
+
+Files are either text/ascii or Binary
+
+---
+
+# Python Operations for files
+
+```
+open(file, mode='r', buffering=-1, encoding=None, errors=None, newline=None, closefd=True, opener=None)¶
+```
+
+* open: returns a file object
+* file: path-like object giving the pathname, typically a string, relative or absolute
+* mode: 
+ * r - read
+ * w - write
+ * x - exclusive creation
+ * a - append
+ * b - binary
+ * t - text
+ * \+ - reading and writing
+
+---
+# Always close your files!
+
+```python
+
+f = open('fname.txt', 'r')
+contents = f.read()
+f.close()
+
+```
+
+* If an exception, that close function may NOT get called.. so we:
+
+```python
+
+with open('fname.txt', 'r') as f:
+    contents = f.read()
+print("File will automatically be closed.")
+
+```
+* Computer operating systems have a limit of how many 'file handles' can be opened. Bad things can happen if you cross that limit. 
+
+---
+# Writing Data to files
+
+For the majority of this course, we'll deal with 'text' files.   This may be slower and more disk space than binary packing data, but, it is simpler to verify.
+
+When we write data to files, we write it as plain text.  An integer becomes a String that looks like an integer.   Strings are strings.   Parsing them is the hard part.
+
+```python
+cars = []
+cars.append({"id": 1, "color":"blue", "make": "ford", "model":"flex"})
+cars.append({"id": 2, "color":"orange", "make": "hyundai", "model":"santa fe sport"})
+cars.append({"id": 3, "color":"green", "make": "honda", "model":"accord"})
+cars.append({"id": 4, "color":"white" "make": "kia", "model":"sorento"})
+cars.append({"id": 5, "color":"black", "make": "jeep", "model":"wrangler"})
+cars.append({"id": 6, "color":"red", "make": "jaguar", "model":"f-type"})
+
+with open('data.txt', 'w') as f:
+    for car in cars:
+        f.write(f"{car['id']},{car['color']},{car['make']},{car['model']") 
+
+```
+
+---
+# What's it look like?
+
+```bash
+
+$ cat data.txt
+1,blue,ford,flex
+2,orange,hyundai,santa fe sport
+3,green,honda,accord
+4,white,kia,sorento
+5,black,jeep,wrangler
+6,red,jaguar,f-type
+
+```
+---
+# Read it back
+
+```python
+cars = []
+with open("data.txt", "r") as f:
+    for line in f.readlines():
+        line = line.strip()
+        parts = line.split(",")
+        cars.append({ "id": parts[0],
+                      "color": parts[1],
+                      "make": parts[2],
+                      "model": parts[3]
+                      })
+print("My resulting cars: ", cars)
+```
+
+---
+# Read - output
+```bash
+$ python read_cars.py
+My resulting cars:  [{'id': '1', 'color': 'blue', 'make': 'ford', 'model': 'flex'}, {'id': '2', 'color': 'orange', 'make': 'hyundai', 'model': 'santa fe sport'}, {'id': '3', 'color': 'green', 'make': 'honda', 'model': 'accord'}, {'id': '4', 'color': 'white', 'make': 'kia', 'model': 'sorento'}, {'id': '5', 'color': 'black', 'make': 'jeep', 'model': 'wrangler'}, {'id': '6', 'color': 'red', 'make': 'jaguar', 'model': 'f-type'}]
+
+```
+* Ok , that's really ugly, let's make it JSON to read better:
+
+---
+# JSON
+
+* Ok , that's really ugly, let's make it JSON to read better:
+```python
+import json
+cars = []
+with open("data.txt", "r") as f:
+    for line in f.readlines():
+        line = line.strip()
+        parts = line.split(",")
+        cars.append({ "id": parts[0],
+                      "color": parts[1],
+                      "make": parts[2],
+                      "model": parts[3]
+                      })
+print(cars)
+print(json.dumps(cars))
+```
+
+```bash
+$ python read_cars.py
+[{'id': '1', 'color': 'blue', 'make': 'ford', 'model': 'flex'}, {'id': '2', 'color': 'orange', 'make': 'hyundai', 'model': 'santa fe sport'}, {'id': '3', 'color': 'green', 'make': 'honda', 'model': 'accord'}, {'id': '4', 'color': 'white', 'make': 'kia', 'model': 'sorento'}, {'id': '5', 'color': 'black', 'make': 'jeep', 'model': 'wrangler'}, {'id': '6', 'color': 'red', 'make': 'jaguar', 'model': 'f-type'}]
+[{"id": "1", "color": "blue", "make": "ford", "model": "flex"}, {"id": "2", "color": "orange", "make": "hyundai", "model": "santa fe sport"}, {"id": "3", "color": "green", "make": "honda", "model": "accord"}, {"id": "4", "color": "white", "make": "kia", "model": "sorento"}, {"id": "5", "color": "black", "make": "jeep", "model": "wrangler"}, {"id": "6", "color": "red", "make": "jaguar", "model": "f-type"}]
+```
+
+* Well that didn't change.
+
+---
+# Pretty JSON
+
+```python
+import json
+cars = []
+with open("data.txt", "r") as f:
+    for line in f.readlines():
+        line = line.strip()
+        parts = line.split(",")
+        cars.append({ "id": parts[0],
+                      "color": parts[1],
+                      "make": parts[2],
+                      "model": parts[3]
+                      })
+# print(cars)
+# print(json.dumps(cars))
+print(json.dumps(cars, sort_keys=True, indent=4))
+
+```
+
+```bash
+$ python read_cars.py
+[
+    {
+        "color": "blue",
+        "id": "1",
+        "make": "ford",
+        "model": "flex"
+    },
+    {
+        "color": "orange",
+        "id": "2",
+        "make": "hyundai",
+        "model": "santa fe sport"
+    },
+    {
+        "color": "green",
+        "id": "3",
+        "make": "honda",
+        "model": "accord"
+    },
+    {
+        "color": "white",
+        "id": "4",
+        "make": "kia",
+        "model": "sorento"
+    },
+    {
+        "color": "black",
+        "id": "5",
+        "make": "jeep",
+        "model": "wrangler"
+    },
+    {
+        "color": "red",
+        "id": "6",
+        "make": "jaguar",
+        "model": "f-type"
+    }
+]
+```
+---
+# CSV 
+
+Python has built in capabilities for dealing with CSV files.<br/>
+<a href="https://docs.python.org/3/library/csv.html"> CSV Python</a><br/>
+```python
+import csv
+cars = []
+cars.append({"id": 1, "color":"blue", "make": "ford", "model":"flex"})
+cars.append({"id": 2, "color":"orange", "make": "hyundai", "model":"santa fe sport"})
+cars.append({"id": 3, "color":"green", "make": "honda", "model":"accord"})
+cars.append({"id": 4, "color":"white", "make": "kia", "model":"sorento"})
+cars.append({"id": 5, "color":"black", "make": "jeep", "model":"wrangler"})
+cars.append({"id": 6, "color":"red", "make": "jaguar", "model":"f-type"})
+
+with open('data.csv', 'w', newline='') as csvfile:
+    fieldnames = ['id', 'color','make','model']
+    writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+    writer.writeheader() # Up to you
+    # for car in cars:
+        # writer.writerow(car)
+    writer.writerows(cars)
+```
+
+```bash
+$ cat data.csv
+id,color,make,model
+1,blue,ford,flex
+2,orange,hyundai,santa fe sport
+3,green,honda,accord
+4,white,kia,sorento
+5,black,jeep,wrangler
+6,red,jaguar,f-type
+```
+---
+# Dealing with Multiple Files
+
+This can really be used for reading and writing multiple files at the same time.  
+
+This simple example will be to 'put the big words' in one file and small words in another.
+
+<a href="http://www.gutenberg.org/files/6130/6130-0.txt">Homer's Iliad - Project Gutenberg</a>
+
+Steps:
+
+* Open iliad.txt to read
+* Open bigwords.txt to write
+* Open smallwords.txt to write
+* Read iliad.txt, process to remove characters we don't care about
+* Loop through words
+ * If long (more than 5 characters) write to bigwords.txt
+ * else write to smallwords.txt
+
+---
+
+```python
+
+with open("iliad.txt", 'r') as iliad, open("bigwords.txt", "w") as big_words, open("smallwords.txt", "w") as small_words:
+    contents = iliad.read()
+    for char in '?!-=+/\'"-.,\n':
+        contents = contents.replace(char,' ')
+    contents = contents.lower()
+    word_list = contents.split()
+    print(word_list[0:100])
+    for word in word_list:
+        if len(word) > 5:
+            big_words.write(f"{word}\n")
+        else:
+            small_words.write(f"{word}\n")
+```
+---
+# Output
+
+```bash
+$ head -n 10 bigwords.txt
+invoking
+minerva
+repressing
+achilles
+departure
+briseis
+achilles
+thetis
+calling
+briareus
+
+$ head -n 10 smallwords.txt
+the
+iliad
+of
+homer
+homer
+the
+muse
+mars
+the
+fury
+```
+
+---
+# Word count
+
+Let's count the most frequent words:
+
+Break it all up into functions for a 'real' Python program
+
+0) Read File - return contents
+1) Count words - for fun
+2) Perform frequency analysis of words
+
+---
+
+```python
+import os
+import sys
+
+
+def frequency_analysis(word_list):
+    def mapper(word):
+        return 1
+
+    mapped = map(mapper, word_list)
+    mapped = zip(word_list, mapped)
+    output_dict = dict()
+    for x in mapped:
+        if x not in output_dict:
+            output_dict[x] = 0
+        output_dict[x] += 1
+    return output_dict
+
+def read_file(filename):
+    with open(filename, 'r') as f:
+        contents = f.read()
+        return contents
+
+def count_words(word_list):
+    return len(word_list)
+
+if __name__ == "__main__":
+
+    filename = "iliad.txt"
+    contents = read_file(filename)
+    print(f"Content length: {len(contents)}")
+    for char in '?!-=+/\'"-.,\n':  # Super inefficient
+        contents = contents.replace(char,' ')
+    contents = contents.lower()
+    word_list = contents.split()
+    word_count = count_words(word_list)
+    print(f"Word count: {word_count}")
+    reduced = frequency_analysis(word_list)
+    sorted_reduced = {k: v for k, v in sorted(reduced.items(), key=lambda item: item[1], reverse=True)}
+    for x in sorted_reduced:
+        print(f"{x}: {sorted_reduced[x]}")
+```
+---
+
+---
+
+---
+
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </textarea>
+    <script src="https://remarkjs.com/downloads/remark-latest.min.js">
+    </script>
+    <script>
+      var slideshow = remark.create();
+    </script>
+  </body>
+</html>
