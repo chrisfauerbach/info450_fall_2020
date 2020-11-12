@@ -90,9 +90,8 @@
 # Agenda
 
 
-1. QUIZ
-2. Database integration
-3. API Design
+1. Database integration
+2. API Design
 
 
 ---
@@ -348,6 +347,7 @@ Traceback (most recent call last):
     c.execute(LOAD_SQL, (movie['id'], movie['title'], movie['original_title'], movie['budget'],
 sqlite3.IntegrityError: UNIQUE constraint failed: movies.id
 ```
+This took about 90 seconds on my laptop:
 
 <a href="./src/load_data.py">load_data.py</a>
 
@@ -538,18 +538,157 @@ if __name__ == "__main__":
 ---
 # Too much code
 
-Lots of repetition.
+Lots of repetition.  The database connection code is repeated over and over.. and will be for every 'endpoint' or function we create.
+
+What if this:
+```python
+def search_title(descr):
+    results = []
+    conn = get_database('database.sqlite3.db')
+    c = conn.cursor()
+    parm = "%{}%".format(descr)
+    SELECT_QUERY = " SELECT * FROM movies WHERE title like ? LIMIT 5 "
+    result = c.execute(SELECT_QUERY, (parm,))
+    for movie in result:
+        results.append(movie)
+    conn.commit()
+    conn.close()
+    return results
+```
+
+Could become:
+```python
+@db
+def search_title(descr, c=None):
+    results = []
+    parm = "%{}%".format(descr)
+    SELECT_QUERY = " SELECT * FROM movies WHERE title like ? LIMIT 5 "
+    result = c.execute(SELECT_QUERY, (parm,))
+    for movie in result:
+        results.append(movie)
+    return results
+```
+
+That example doesn't remove much code, but, it removes the boilerplate stuff.  We can use a 'decorator' to make this happen.
 
 ---
+# Decorator
+
+decorators wrap a function, modifying its behavior.
+
+Notice this:
+```python
+def search_title(descr):
+```
+becomes
+```python
+@db
+def search_title(descr, c=None):
+```
+
+'db' is the decorator.  We use the @ symbol to show that it's going to 'wrap' the function
+
+---
+# Functions
+
+Things to know.  Functions are 'first class objects'. We can pass a function around as a variable.
+
+e.g.:
+
+```python
+def my_function():
+   pass
+
+f = my_function
+f()
+```
+
+That calls 'my_function' but with an 'alias' of `f`.
 
 
 ---
+# Back to decorators
+
+My goal with the `db` function is to be able to inject the database cursor for any method that needs it.  
+
+That `abstracts` the details of the database away from that function.  
+
+This helps with:
+* cleaner code
+* ability to test easier
+* hides changes to databases within one block of code.
+
+Let's look at the `db` decorator
+
+---
+# @db
+
+```python
+from functools import wraps
+.
+.
+.
+
+def db(func):
+    @wraps(func)
+    def wrapper_to_add(*args, **kwargs):
+        cur = None
+        conn = None
+        try:
+            conn = get_database('database.sqlite3.db')
+            conn.row_factory = dict_factory
+            cur = conn.cursor()
+            a = func(*args, c=cur, **kwargs)
+            logging.debug("Func returned a: ", a)
+            conn.commit()
+
+            return a
+        except:
+            logging.exception("Exception while processing. Will Attempt to Rollback")
+            try:
+                if conn:  conn.rollback()
+            except:
+                logging.exception("Had an issue rolling back.")
+                traceback.print_exc(file=sys.stdout)
+        finally:
+            if cur:  cur.close()
+            if conn:  conn.close()
+    return wrapper_to_add
+
+```
+---
+# Why did we do that again?
+
+Imagine I want to:
+
+* change the database filename
+* Start using a Postgresql database
+* Use an in memory database for testing.
+* Use a different database in testing vs production
 
 
 ---
+# Next phase of homework
 
+* In your 'server' class, add a new path:
+ * @app.route('/movies/<int:movies_id>')
+ * From your function, return the dict representing the movie
+ * Make a second route to query the title, like we did in class.
+ * @app.route('/movies/bytitle/<str:title>')
+ * From your function, return an array of dicts representing the movies that match
+* If you get an error while trying to use two decorators, put your decorators in this order:
+```python
+# Adding GET
+@app.route('/country', methods=['GET'])
+@db
+```
 
----
+* In your client application, take a command line argument representing the ID of the movie you want information about:
+ * python3 client.py 1234
+ * HINT: Make sure it's an integer.  If it's not an integer, don't make the API call, and error.
+ * In addition, if it can't be parsed as an integer, call the 'bytitle' endpoint
+ * Regardless of which endpoint you call, print out the results. 
+ * Besides the 'text' from the API call, use the logging framework
 
 
 ---
