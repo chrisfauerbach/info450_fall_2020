@@ -658,23 +658,28 @@ def db(func):
 ```
 ---
 # Why did we do that again?
-
 Imagine I want to:
 
 * change the database filename
 * Start using a Postgresql database
 * Use an in memory database for testing.
 * Use a different database in testing vs production
-
-
 ---
 # Next phase of homework
-
+<span style="font-size:12pt">
 * In your 'server' class, add a new path:
- * @app.route('/movies/<int:movies_id>')
+
+```
+@app.route('/movies/<int:movies_id>')
+```
+
  * From your function, return the dict representing the movie
  * Make a second route to query the title, like we did in class.
- * @app.route('/movies/bytitle/<str:title>')
+
+```
+@app.route('/movies/bytitle/<str:title>')
+```
+
  * From your function, return an array of dicts representing the movies that match
 * If you get an error while trying to use two decorators, put your decorators in this order:
 ```python
@@ -682,6 +687,9 @@ Imagine I want to:
 @app.route('/country', methods=['GET'])
 @db
 ```
+CLIENT ON NEXT PAGE
+
+---
 
 * In your client application, take a command line argument representing the ID of the movie you want information about:
  * python3 client.py 1234
@@ -689,7 +697,7 @@ Imagine I want to:
  * In addition, if it can't be parsed as an integer, call the 'bytitle' endpoint
  * Regardless of which endpoint you call, print out the results. 
  * Besides the 'text' from the API call, use the logging framework
-
+</span>
 
 ---
 
