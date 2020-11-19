@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>INFO 450 - Week 14</title>
+    <meta charset="utf-8">
+    <style>
+      @import url(https://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
+      @import url(https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic);
+      @import url(https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700,400italic);
+      body 
+      { font-family: 'Droid Serif'; }
+
+      
+      h1, h2, h3 {
+        font-family: 'Yanone Kaffeesatz';
+        font-weight: normal;
+      }
+      .remark-code, .remark-inline-code { font-family: 'Ubuntu Mono'; }
+      .remark-code, .remark-inline-code, .remark-code-line { 
+      font-size: 10px; 
+      }
+      i {
+          color: #0000FF;
+      }
+/* Two-column layout */
+      .left-column {
+        color: #777;
+        width: 20%;
+        height: 92%;
+        float: left;
+      }
+        .left-column h2:last-of-type, .left-column h3:last-child {
+          color: #000;
+        }
+      .right-column {
+        width: 75%;
+        float: right;
+        padding-top: 1em;
+      }
+/* Two-column layout */
+      .left-column-half {
+        color: #777;
+        width: 50%;
+        height: 92%;
+        float: left;
+      }
+      .right-column-half {
+        width: 50%;
+        float: right;
+        padding-top: 1em;
+        line-height: .9em;
+      }
+
+      table {
+        width: 100%;
+        border: 2px solid black;
+        }
+        table, th, td {
+           border: 1px solid black;
+        }
+
+
+    .remark-code{
+      font-size:12px;
+    }
+
+
+    .remark-slide-content{
+      font-size:14px;
+    }
+
+    table, td, th {
+        border: 1px solid black;
+        font-size: .9em;
+    }
+    code {
+      white-space : pre-wrap !important;
+     } 
+    quote {
+      font-style: italic;
+
+     }
+    </style>
+  </head>
+  <body>
+    <textarea id="source" class: center, middle >
+
+# INFO 450 Fall 2020
+<div style="text-align:center;font-size: 1.5;line-height:1.8em;">Week 14</div>
+<div style="text-align:center;font-size: 1.5;line-height:1.8em;">Nov 19, 2020</div>
+ 
+---
+# Agenda
+
+
+1. Something fun, game development
+
+2. Exam Topics that are fair game
+
+
+---
+# pygame
+
+<a href="https://realpython.com/pygame-a-primer/">https://realpython.com/pygame-a-primer/</a>
+
+Let's work through a game/UI together!
+
+```
+➜  src git:(master) ✗ pipenv install pygame
+Installing pygame...
+Adding pygame to Pipfile's [packages]...
+✔ Installation Succeeded
+Pipfile.lock not found, creating...
+Locking [dev-packages] dependencies...
+Locking [packages] dependencies...
+Building requirements...
+Resolving dependencies...
+✔ Success!
+Updated Pipfile.lock (a30fff)!
+Installing dependencies from Pipfile.lock (a30fff)...
+  🐍   ▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉ 0/0 — 00:00:00
+To activate this project's virtualenv, run pipenv shell.
+Alternatively, run a command inside the virtualenv with pipenv run.
+➜  src git:(master) ✗ pipenv shell
+Launching subshell in virtual environment...
+/Users/lin138/.zshrc:1: command not found: cofproxy
+ . /Users/lin138/.local/share/virtualenvs/week14-4KQBs-PX/bin/activate
+➜  week14 git:(master) ✗  . /Users/lin138/.local/share/virtualenvs/week14-4KQBs-PX/bin/activate
+(week14) ➜  week14 git:(master) ✗ code ../index.html
+(week14) ➜  week14 git:(master) ✗ python3 -m pygame.examples.aliens
+pygame 2.0.0 (SDL 2.0.12, python 3.9.0)
+Hello from the pygame community. https://www.pygame.org/contribute.html
+```
+---
+# step1.py
+
+```python
+# Simple pygame program
+
+# Import and initialize the pygame library
+import pygame
+
+# Setup the pygame engine
+pygame.init()
+
+# Set up the drawing window
+screen = pygame.display.set_mode([500, 500])
+
+# Run until the user asks to quit
+running = True
+while running:
+
+    # Did the user click the window close button?
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+
+    # Fill the background with white
+    screen.fill((255, 255, 255))
+
+    # Draw a solid blue circle in the center
+    pygame.draw.circle(screen, (0, 0, 255), (250, 250), 75)
+
+    # Flip the display
+    pygame.display.flip()
+
+# Done! Time to quit.
+pygame.quit()
+```
+---
+# Adding controls
+
+After you import pygame, you’ll also need to initialize it. This allows pygame to connect its abstractions to your specific hardware:
+
+
+```python
+# Import pygame.locals for easier access to key coordinates
+# Updated to conform to flake8 and black standards
+from pygame.locals import (
+    K_UP,
+    K_DOWN,
+    K_LEFT,
+    K_RIGHT,
+    K_ESCAPE,
+    KEYDOWN,
+    QUIT,
+)
+
+```
+
+---
+# Set up the display
+
+```python
+# Initialize pygame
+pygame.init()
+
+# Define constants for the screen width and height
+SCREEN_WIDTH = 800
+SCREEN_HEIGHT = 600
+
+# Create the screen object
+# The size is determined by the constant SCREEN_WIDTH and SCREEN_HEIGHT
+screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+
+```
+<a href="src/step2.py">step2.py</a>
+
+---
+# Game Loop
+
+The central component of any game, from a programming standpoint, is the game loop. The game loop allows the game to run smoothly regardless of a user's input or lack thereof.
+
+Most traditional software programs respond to user input and do nothing without it. For example, a word processor formats words and text as a user types. If the user doesn't type anything, the word processor does nothing. Some functions may take a long time to complete, but all are initiated by a user telling the program to do something.
+
+Every game from Pong to Fortnite uses a game loop to control gameplay. The game loop does four very important things:
+
+* Processes user input
+* Updates the state of all game objects
+* Updates the display and audio output
+* Maintains the speed of the game
+
+
+Games, on the other hand, must continue to operate regardless of a user's input. The game loop allows this. A highly simplified game loop, in pseudocode, might look something like this :
+
+```
+while (user does not exit)
+    check for user input
+    run AI
+    move enemies
+    resolve collisions
+    draw graphics
+    play sounds
+end while
+```
+
+
+
+---
+# Processing Events
+
+Every event in pygame has an event type associated with it. 
+
+For your game, the event types you’ll focus on are keypresses and window closure. 
+
+Keypress events have the event type KEYDOWN, and the window closure event has the type QUIT. 
+
+Different event types may also have other data associated with them. 
+
+For example, the KEYDOWN event type also has a variable called key to indicate which key was pressed.
+
+```python
+# Variable to keep the main loop running
+running = True
+
+# Main loop
+while running:
+    # Look at every event in the queue
+    for event in pygame.event.get():
+        # Did the user hit a key?
+        if event.type == KEYDOWN:
+            # Was it the Escape key? If so, stop the loop.
+            if event.key == K_ESCAPE:
+                running = False
+
+        # Did the user click the window close button? If so, stop the loop.
+        elif event.type == QUIT:
+            running = False
+```
+
+<a src="src/step3.py">step3.py</a>
+---
+# Drawing on the screen
+
+So far, we've drawn with:
+ * screen.fill() to fill the background
+ * pygame.draw.circle() to draw a circle
+
+## Surface
+
+Surface is a rectangular object on which you can draw, like a blank sheet of paper. The screen object is a Surface, and you can create your own Surface objects separate from the display screen. 
+
+```python3
+# Fill the screen with white
+screen.fill((255, 255, 255))
+
+# Create a surface and pass in a tuple containing its length and width
+surf = pygame.Surface((50, 50))
+
+# Give the surface a color to separate it from the background
+surf.fill((0, 0, 0))
+rect = surf.get_rect()
+```
+
+<a href="src/step4.py">step4.py</a>
+
+
+---
+# blit and Flip
+
+Just creating a new Surface isn’t enough to see it on the screen. 
+To do that, you need to blit the Surface onto another Surface. 
+The term blit stands for Block Transfer, and .blit() is how you copy the contents of one Surface to another. 
+You can only .blit() from one Surface to another, but since the screen is just another Surface, that’s not a problem. 
+Here’s how you draw surf on the screen:
+
+```python
+screen.blit(surf, (SCREEN_WIDTH/2, SCREEN_HEIGHT/2))
+pygame.display.flip()
+
+```
+
+<a href="src/step5.py">step5.py</a>
+
+Center it:
+```python
+# Put the center of surf at the center of the display
+surf_center = (
+    (SCREEN_WIDTH-surf.get_width())/2,
+    (SCREEN_HEIGHT-surf.get_height())/2
+)
+
+# Draw surf at the new coordinates
+screen.blit(surf, surf_center)
+
+```
+
+<a href="src/step6.py">step6.py</a>
+---
+# Sprites
+
+In your game design, the player starts on the left, and obstacles come in from the right. 
+You can represent all the obstacles with Surface objects to make drawing everything easier, but how do you know where to draw them? 
+How do you know if an obstacle has collided with the player? 
+What happens when the obstacle flies off the screen? 
+What if you want to draw background images that also move? 
+What if you want your images to be animated? 
+You can handle all these situations and more with sprites.
+
+In programming terms, a sprite is a 2D representation of something on the screen. 
+Essentially, it’s a picture. 
+pygame provides a Sprite class, which is designed to hold one or several graphical representations of any game object that you want to display on the screen. 
+To use it, you create a new class that extends Sprite. 
+This allows you to use its built-in methods.
+
+```python
+# Define a Player object by extending pygame.sprite.Sprite
+# The surface drawn on the screen is now an attribute of 'player'
+class Player(pygame.sprite.Sprite):
+    def __init__(self):
+        super(Player, self).__init__()
+        self.surf = pygame.Surface((75, 25))
+        self.surf.fill((255, 255, 255))
+        self.rect = self.surf.get_rect()
+```
+---
+```python
+# Import the pygame module
+import pygame
+
+# Import pygame.locals for easier access to key coordinates
+# Updated to conform to flake8 and black standards
+from pygame.locals import (
+    K_UP,
+    K_DOWN,
+    K_LEFT,
+    K_RIGHT,
+    K_ESCAPE,
+    KEYDOWN,
+    QUIT,
+)
+
+# Define constants for the screen width and height
+SCREEN_WIDTH = 800
+SCREEN_HEIGHT = 600
+
+# Define a player object by extending pygame.sprite.Sprite
+# The surface drawn on the screen is now an attribute of 'player'
+class Player(pygame.sprite.Sprite):
+    def __init__(self):
+        super(Player, self).__init__()
+        self.surf = pygame.Surface((75, 25))
+        self.surf.fill((255, 255, 255))
+        self.rect = self.surf.get_rect()
+
+# Initialize pygame
+pygame.init()
+
+# Create the screen object
+# The size is determined by the constant SCREEN_WIDTH and SCREEN_HEIGHT
+screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+
+# Instantiate player. Right now, this is just a rectangle.
+player = Player()
+
+# Variable to keep the main loop running
+running = True
+
+# Main loop
+while running:
+    # for loop through the event queue
+    for event in pygame.event.get():
+        # Check for KEYDOWN event
+        if event.type == KEYDOWN:
+            # If the Esc key is pressed, then exit the main loop
+            if event.key == K_ESCAPE:
+                running = False
+        # Check for QUIT event. If QUIT, then set running to false.
+        elif event.type == QUIT:
+            running = False
+
+    # Fill the screen with black
+    screen.fill((0, 0, 0))
+
+    # Draw the player on the screen
+    screen.blit(player.surf, (SCREEN_WIDTH/2, SCREEN_HEIGHT/2))
+
+    # Update the display
+    pygame.display.flip()
+```
+<a href="src/step7.py">step7.py</a>
+
+
+---
+# Blit to itself
+
+```python
+# Fill the screen with black
+screen.fill((0, 0, 0))
+
+# Draw the player on the screen
+screen.blit(player.surf, player.rect)
+
+# Update the display
+pygame.display.flip()
+```
+<a href="src/step8.py">step8.py</a>
+---
+# User Input
+
+Let's make your Player move!
+
+After your event loop:
+
+```python
+
+# Get the set of keys pressed and check for user input
+pressed_keys = pygame.key.get_pressed()
+```
+
+```python
+# Add to the player class
+# Move the sprite based on user keypresses
+def update(self, pressed_keys):
+    if pressed_keys[K_UP]:
+        self.rect.move_ip(0, -5)
+    if pressed_keys[K_DOWN]:
+        self.rect.move_ip(0, 5)
+    if pressed_keys[K_LEFT]:
+        self.rect.move_ip(-5, 0)
+    if pressed_keys[K_RIGHT]:
+        self.rect.move_ip(5, 0)
+```
+
+```python
+# Main loop
+while running:
+    # for loop through the event queue
+    for event in pygame.event.get():
+        # Check for KEYDOWN event
+        if event.type == KEYDOWN:
+            # If the Esc key is pressed, then exit the main loop
+            if event.key == K_ESCAPE:
+                running = False
+        # Check for QUIT event. If QUIT, then set running to false.
+        elif event.type == QUIT:
+            running = False
+
+    # Get all the keys currently pressed
+    pressed_keys = pygame.key.get_pressed()
+
+    # Update the player sprite based on user keypresses
+    player.update(pressed_keys)
+
+    # Fill the screen with black
+    screen.fill((0, 0, 0))
+
+```
+<a href="src/step9.py">step9.py</a>
+
+---
+# Keep it on the board
+
+```python
+# Move the sprite based on user keypresses
+def update(self, pressed_keys):
+    if pressed_keys[K_UP]:
+        self.rect.move_ip(0, -5)
+    if pressed_keys[K_DOWN]:
+        self.rect.move_ip(0, 5)
+    if pressed_keys[K_LEFT]:
+        self.rect.move_ip(-5, 0)
+    if pressed_keys[K_RIGHT]:
+        self.rect.move_ip(5, 0)
+
+    # Keep player on the screen
+    if self.rect.left < 0:
+        self.rect.left = 0
+    if self.rect.right > SCREEN_WIDTH:
+        self.rect.right = SCREEN_WIDTH
+    if self.rect.top <= 0:
+        self.rect.top = 0
+    if self.rect.bottom >= SCREEN_HEIGHT:
+        self.rect.bottom = SCREEN_HEIGHT
+```
+
+---
+# Let's add some bad guys
+
+```python
+import random
+```
+
+```python
+# Define the enemy object by extending pygame.sprite.Sprite
+# The surface you draw on the screen is now an attribute of 'enemy'
+class Enemy(pygame.sprite.Sprite):
+    def __init__(self):
+        super(Enemy, self).__init__()
+        self.surf = pygame.Surface((20, 10))
+        self.surf.fill((255, 255, 255))
+
+        # Random location on the right side
+        self.rect = self.surf.get_rect(
+            center=(
+                random.randint(SCREEN_WIDTH + 20, SCREEN_WIDTH + 100),
+                random.randint(0, SCREEN_HEIGHT),
+            )
+        )
+        self.speed = random.randint(5, 20)
+
+    # Move the sprite based on speed
+    # Remove the sprite when it passes the left edge of the screen
+    def update(self):
+        self.rect.move_ip(-self.speed, 0)
+        if self.rect.right < 0:
+            self.kill()
+```
+
+
+---
+# Sprite Groups to keep trakc
+
+```python
+# Instantiate player. Right now, this is just a rectangle.
+player = Player()
+
+# Create groups to hold enemy sprites and all sprites
+# - enemies is used for collision detection and position updates
+# - all_sprites is used for rendering
+enemies = pygame.sprite.Group()
+all_sprites = pygame.sprite.Group()
+all_sprites.add(player)
+
+# Variable to keep the main loop running
+running = True
+
+```
+
+Then draw all sprites:
+```python
+# Draw all sprites
+for entity in all_sprites:
+    screen.blit(entity.surf, entity.rect)
+```
+
+<a href="src/step12.py">step12.py</a>
+
+https://realpython.com/pygame-a-primer/#sprite-groups
+
+---
+---
+---
+# Exam Topics
+
+* Data types
+* Lists, dicts, tuples
+* control structures
+ * if
+ * for
+* truthiess
+* None
+* file input/output
+* logging
+* user input/output
+* numpy
+* pandas
+* anaconda
+* jupyter notebooks
+* flask
+* requests
+
+
+
+---
+
+</span>
+
+---
+
+
+---
+
+
+---
+
+
+
+---
+    </textarea>
+    <script src="https://remarkjs.com/downloads/remark-latest.min.js">
+    </script>
+    <script>
+      var slideshow = remark.create();
+    </script>
+  </body>
+</html>
